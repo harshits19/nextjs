@@ -11,7 +11,7 @@ type Params = {
   }
 }
 //fn to generate dynamic metadata
-export const generateMetadata = async ({ params: { userId } }: Params) => {
+export const GenerateMetadata = async ({ params: { userId } }: Params) => {
   //in nextjs, when there's two same get req, [nextjs caches each req] so only once get req is called
   const userData: Promise<User> = useFetchUser(userId) 
   const user = await userData
