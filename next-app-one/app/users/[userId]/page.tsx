@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import { Metadata } from "next"
 import { Suspense } from "react"
 import Link from "next/link"
 import UserPosts from "./_components/UserPosts"
@@ -10,16 +10,16 @@ type Params = {
     userId: string
   }
 }
-//fn to generate dynamic metadata
-export const GenerateMetadata = async ({ params: { userId } }: Params) => {
+//generateMetadata (nextjs method) used to set metadata dynamically
+export const generateMetadata = async ({ params: { userId } }: Params): Promise<Metadata> => {
   //in nextjs, when there's two same get req, [nextjs caches each req] so only once get req is called
-  const userData: Promise<User> = useFetchUser(userId) 
-  const user = await userData
-  const metadata: Metadata = {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
+  if (!res.ok) throw new Error("Failed to fetch User")
+  const user: User = await res.json()
+  return {
     title: user.name,
     description: `Page of ${user.name}`,
   }
-  return metadata
 }
 
 //to fetch params from url, have to define params
