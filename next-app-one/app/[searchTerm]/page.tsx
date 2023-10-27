@@ -3,12 +3,18 @@ type Props = {
     searchTerm: string
   }
 }
-import useFetchSearch from "@/lib/useFetchSearch"
+import getSearchResults from "@/lib/getSearchResults"
 import SearchCard from "./_components/SearchCard"
-import { Metadata } from "next"
 
 export const generateMetadata = async ({ params: { searchTerm } }: Props): Promise<any> => {
+  const resData: Promise<SearchResult> = getSearchResults(searchTerm)
+  const data = await resData
   const displayTerm = searchTerm.replaceAll("%20", " ")
+  if (!data?.query?.pages) {
+    return {
+      title: `${displayTerm} Not Found`,
+    }
+  }
   return {
     title: displayTerm,
     description: `Search results for ${displayTerm}`,
@@ -16,7 +22,7 @@ export const generateMetadata = async ({ params: { searchTerm } }: Props): Promi
 }
 
 const SearchPage = async ({ params: { searchTerm } }: Props) => {
-  const resData: Promise<SearchResult> = useFetchSearch(searchTerm)
+  const resData: Promise<SearchResult> = getSearchResults(searchTerm)
   const data = await resData
   const result: Result[] | undefined = data?.query?.pages
 

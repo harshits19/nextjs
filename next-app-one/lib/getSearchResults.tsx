@@ -1,4 +1,4 @@
-const useFetchSearch = async (searchTerm: string) => {
+const getSearchResults = async (searchTerm: string) => {
   const searchParams = new URLSearchParams({
     action: "query",
     generator: "search",
@@ -15,4 +15,4 @@ const useFetchSearch = async (searchTerm: string) => {
   const response = await fetch("https://en.wikipedia.org/w/api.php?" + searchParams)
   return response.json()
 }
-export default useFetchSearch
+export default getSearchResults

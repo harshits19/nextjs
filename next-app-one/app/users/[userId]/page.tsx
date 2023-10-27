@@ -2,8 +2,8 @@ import { Metadata } from "next"
 import { Suspense } from "react"
 import Link from "next/link"
 import UserPosts from "./_components/UserPosts"
-import useFetchUser from "@/lib/useFetchUser"
-import useFetchUserPosts from "@/lib/useFetchUserPosts"
+import getUser from "@/lib/getUser"
+import getUserPosts from "@/lib/getUserPosts"
 
 type Params = {
   params: {
@@ -13,9 +13,11 @@ type Params = {
 //generateMetadata (nextjs method) used to set metadata dynamically
 export const generateMetadata = async ({ params: { userId } }: Params): Promise<Metadata> => {
   //in nextjs, when there's two same get req, [nextjs caches each req] so only once get req is called
-  const res = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
+  /*  const res = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
   if (!res.ok) throw new Error("Failed to fetch User")
-  const user: User = await res.json()
+  const user: User = await res.json() */
+  const userData: Promise<User> = getUser(userId)
+  const user = await userData
   return {
     title: user.name,
     description: `Page of ${user.name}`,
@@ -24,8 +26,8 @@ export const generateMetadata = async ({ params: { userId } }: Params): Promise<
 
 //to fetch params from url, have to define params
 const UserPage = async ({ params: { userId } }: Params) => {
-  const userData: Promise<User> = useFetchUser(userId)
-  const userPosts: Promise<Post[]> = useFetchUserPosts(userId)
+  const userData: Promise<User> = getUser(userId)
+  const userPosts: Promise<Post[]> = getUserPosts(userId)
   // const [user, posts] = await Promise.all([userData, userPosts]) //method to serve multiple request
   const user = await userData
   // console.log(user)

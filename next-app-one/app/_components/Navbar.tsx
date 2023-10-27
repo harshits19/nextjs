@@ -11,7 +11,7 @@ const Navbar = () => {
     setInputVal('')
   }
   return (
-    <div className="sticky top-0 w-full bg-gray-300 drop-shadow-sm px-10 py-4 gap-2 flex flex-row flex-wrap items-center justify-center sm:justify-between">
+    <div className="sticky top-0 w-full z-50 bg-gray-300 drop-shadow-sm px-10 py-4 gap-2 flex flex-row flex-wrap items-center justify-center sm:justify-between">
       <p className="text-3xl font-bold">
         <Link href="/">My Next APP</Link>
       </p>
